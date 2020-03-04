@@ -3,6 +3,7 @@ h1{
 }
 body{
   border: solid 1px cornflowerblue;
+  text-align: center;
 }
 .bottan{
   background-color: darkblue;
@@ -13,4 +14,50 @@ body{
 }
 p{
   color: red;
+}
+.container{
+  font-family: 'Noto Sans JP',sans-serif;
+  margin-top: 80px;
+}
+h3{
+  margin-bottom: 30px;
+  text-align: center;
+}
+th{
+  height: 30px;
+}
+.table-bordered td{
+  height: 200px;
+  width: 150px;
+  vertical-align: top;
+  background-color: white;
+}
+.today{
+  background-color: orange;
+}
+.table-bordered th:nth-of-type(1),.table-bordered td:nth-of-type(1){
+  color: red;
+}
+.table-bordered th:nth-of-type(7),.table-bordered td:nth-of-type(7){
+  color: blue;
+}
+table{
+  border-collapse: collapse;
+  width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.syuu td{
+  height: 30px;
+  text-align: center;
+}
+table p{
+  text-align: center;
+  font-size:1px;
+  color: black;
+}
+.new{
+  font-size:100%;
 }
