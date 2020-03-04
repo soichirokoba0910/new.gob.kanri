@@ -1,0 +1,16 @@
+h1{
+  color: blue;
+}
+body{
+  border: solid 1px cornflowerblue;
+}
+.bottan{
+  background-color: darkblue;
+  color: white;
+  height: 50px;
+  width: 100px;
+  border-radius: 10px;
+}
+p{
+  color: red;
+}
