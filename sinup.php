@@ -1,3 +1,4 @@
+  
 <?php
  $usr ="test";
  $pass ="sakiyama0910";
@@ -20,7 +21,7 @@
   </head>
   <body>
     <h1>ログイン</h1>
-    <form action="#" method="POST">
+    <form action="login.php" method="POST">
       会員ＩＤ:<input type="text" name="id" value="">
       <br>
       パスワード:<input type="password" name="pass" value="">
@@ -29,22 +30,5 @@
       <input type="reset" name="reset" value="取り消し" class="bottan">
     </form>
     <h6>まだ登録してない方は<a href="new_peple.php">こちら</a></h6>
-    <?php         
-  $sql = "SELECT * FROM new_pepole";
-  $stmt = $dbh->query($sql);
-  if($_POST){
-    $x=0;
-    $y=0;
-    foreach($stmt as $row){
-      if(!($row['id']==$_POST['id']&&$row['pass']==$_POST['pass'])){
-          $x++;
-      }
-      $y++;
-     }
-     if($x==$y){
-      echo "<p>IDかパスワードが違います</p>";
-    }
-    }
-      ?>
   </body>
 </html>
