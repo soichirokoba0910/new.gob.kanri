@@ -78,10 +78,15 @@
   </head>
   <body>
     <div class ="container">
+      <?php  
+        session_start();
+        echo '<h1>'.$_SESSION['name'].'さんの仕事内容</h1>';
+      ?>
       <h3><a href="?ym=<?php echo $prev; ?>">&lt;</a><?php echo $html_title; ?><a href="?ym=<?php echo $next ; ?>">&gt;</a></h3>
-     <p class="new"> <a href="job.php">新規登録</a></p>
+      <a class="bot" href="job.php">新しい仕事の新規登録</a>
+      <a class="bot" href="logout_job.php">ログアウト</a>
      <table border ="1">
-       <tr><th>日にち</th><th>時間</th><th>タイトル</th><th>場所</th><th>内容</th><th>重要度</th><th>更新</th></tr>
+       <tr><th>日にち</th><th>時間</th><th>タイトル</th><th>場所</th><th>内容</th><th>重要度</th><th>更新</th><th>削除</th></tr>
        <?php
           $sql = "SELECT * FROM jobs";
           $stmt = $dbh->query($sql);
@@ -89,11 +94,12 @@
            echo '<tr>';
            echo '<td>'.$row['month'].'月'.$row['day'].'日</td>';
            echo '<td>'.$row['start'].'～'.$row['end'].'</td>';
-           echo '<td>'.$row['title'].'</td>';
-           echo '<td>'.$row['place'].'</td>';
+           echo '<td><a href="frend.php?id='.$row['id'].'">'.$row['title'].'</a></td>';
+           echo '<td><a href="https://www.google.co.jp/maps/search/'.$row['place'].'">'.$row['place'].'</a></td>';
            echo '<td>'.$row['content'].'</td>';
            echo '<td>'.$row['importance'].'</td>';
            echo '<td><a href="edit_job.php?id='.$row['id'].'">更新</a></td>';
+           echo '<td><a href="delete_job.php?id='.$row['id'].'">削除</a></td>';
            echo '</tr>';
          }
        ?>
