@@ -4,6 +4,8 @@
   if(isset($_GET['id'])){
   try{
     $id =(int)$_GET['id'];
+    session_start();
+    $_SESSION['id'] =$id;
     $dbh = new PDO('mysql:host=localhost;dbname=manabiya;charset=utf8', $user,$pass);
     $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -38,17 +40,24 @@
       try{
         $sql="SELECT *FROM enter";
         $stmt = $dbh->query($sql);
-        session_start();
         echo '<p>参加者一覧</p>';
         $enter=0;
+        $i=0;
         foreach($stmt as $row){
             if($row['id']==$_SESSION['id']){
-              echo $row['name'].'<br>';
-              $enter++;
+              $result[$_SESSION['id']][$i] =$row['name'];
+              $i++;
             }
         }
+
+        if(!empty($result[$_SESSION['id']])){
+        for($i=0;$i<count($result[$_SESSION['id']]);$i++) {
+          echo $result[$_SESSION['id']][$i].'<br>';
+          $enter++;
+        } 
+      }
         echo '計'.$enter.'人';
-      } catch(PDOException $e) {
+      } catch(PDOException $e){
         print('接続失敗:' . $e->getMessage());
         die();
       }
