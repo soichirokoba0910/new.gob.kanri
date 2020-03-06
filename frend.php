@@ -25,6 +25,7 @@
     <meta charset="UTF-8">
     <title>仕事関係者</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
   </head>
   <body>
     <h1><?php  if(isset($_GET['id']))   echo $result['title'] ?></h1>
@@ -40,7 +41,7 @@
       try{
         $sql="SELECT *FROM enter";
         $stmt = $dbh->query($sql);
-        echo '<p>参加者一覧</p>';
+        echo '<div class="hyou"><p>参加者一覧</p>';
         $enter=0;
         $i=0;
         foreach($stmt as $row){
@@ -49,14 +50,66 @@
               $i++;
             }
         }
-
         if(!empty($result[$_SESSION['id']])){
+          $sanka='<ul>';
         for($i=0;$i<count($result[$_SESSION['id']]);$i++) {
-          echo $result[$_SESSION['id']][$i].'<br>';
+          $sanka.='<li>'.$result[$_SESSION['id']][$i].'</li>';
           $enter++;
         } 
+        $sanka.='</ul>';
+        echo  $sanka;
       }
-        echo '計'.$enter.'人';
+        echo '<br>計'.$enter.'人</div>';
+        //ここまで参加者
+
+        $sql="SELECT *FROM no_enter";
+        $stmt = $dbh->query($sql);
+        echo '<div class="hyou"><p>不参加者一覧</p>';
+        $no_enter=0;
+        $i=0;
+        foreach($stmt as $row){
+            if($row['id']==$_SESSION['id']){
+              $result1[$_SESSION['id']][$i] =$row['name'];
+              $i++;
+            }
+        }
+
+        if(!empty($result1[$_SESSION['id']])){
+          $nosanka ='<ul>';
+        for($i=0;$i<count($result1[$_SESSION['id']]);$i++) {
+          $nosanka.='<li>'.$result1[$_SESSION['id']][$i].'</li>';
+          $no_enter++;
+        } 
+        $nosanka.='</ul>';
+        echo   $nosanka;
+      }
+      echo '計'.$no_enter.'人</div>'; 
+       //ここまで不参加者
+
+       $sql="SELECT *FROM unkonow";
+       $stmt = $dbh->query($sql);
+       echo '<div class="hyou"><p>不明者一覧</p>';
+       $unkown=0;
+       $i=0;
+       foreach($stmt as $row){
+           if($row['id']==$_SESSION['id']){
+             $result2[$_SESSION['id']][$i] =$row['name'];
+             $i++;
+           }
+       }
+
+       if(!empty($result2[$_SESSION['id']])){
+       for($i=0;$i<count($result2[$_SESSION['id']]);$i++) {
+         $humei='<ul>';
+        $humei.='<li>'.$result2[$_SESSION['id']][$i].'</li>';
+         $unkown++;
+       } 
+       $humei.='</ul>';
+       echo  $humei;
+     }
+     echo '計'.$unkown.'人</div>'; 
+     //ここまで不明者
+
       } catch(PDOException $e){
         print('接続失敗:' . $e->getMessage());
         die();
@@ -73,11 +126,12 @@
     </form>
     <?php
       if($_POST){
+        try{
+        $dbh = new PDO('mysql:host=localhost;dbname=manabiya;charset=utf8', $user,$pass);
+        $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         if($_POST['entry']==1){
-          $dbh = new PDO('mysql:host=localhost;dbname=manabiya;charset=utf8', $user,$pass);
-          $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
-          $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          try{
+  
             $sql ="INSERT INTO enter(name,id) VALUES (:name,:id)";
             $stmt =$dbh->prepare($sql);
             session_start();
@@ -86,15 +140,36 @@
             $stmt->execute(); 
              echo "参加メンバーに加わりました";
              $dbh=null;
-          } catch(PDOException $e){
-            echo 'エラー:' .$e->getMessage();
-          }
+             //参加者一覧
+          
         } elseif($_POST['entry']==2) {
+          $sql ="INSERT INTO no_enter(name,id) VALUES (:name,:id)";
+          $stmt =$dbh->prepare($sql);
+          session_start();
+          $stmt->bindValue(':name',$_SESSION['name'],PDO::PARAM_STR);
+          $stmt->bindValue(':id',$_SESSION['id'],PDO::PARAM_STR);  
+          $stmt->execute(); 
           echo '不参加メンバーに加わりました';
+           $dbh=null;
+           //不参加一覧
+      
         } else {
-          echo '不明です';
-        }
+          $sql ="INSERT INTO unkonow(name,id) VALUES (:name,:id)";
+          $stmt =$dbh->prepare($sql);
+          session_start();
+          $stmt->bindValue(':name',$_SESSION['name'],PDO::PARAM_STR);
+          $stmt->bindValue(':id',$_SESSION['id'],PDO::PARAM_STR);  
+          $stmt->execute(); 
+          echo '不明';
+           $dbh=null;
+           //不明者一覧
+        } 
+      } catch(PDOException $e){
+        print('接続失敗:' . $e->getMessage());
+        die();
       }
+    }
+      
     ?>
     <br>
     <a href="main_job.php">戻る</a>
