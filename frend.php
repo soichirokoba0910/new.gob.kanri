@@ -138,11 +138,35 @@
           $sql = "SELECT * FROM enter";
           $stmt = $dbh->query($sql);
           foreach($stmt as $row){
-            if($row['name_id'] == $_SESSION['nameid']);
-             echo "<p>※すでに参加者メンバーです</p>";
-             echo '<a href = "main_job.php">戻る</a>';
-             return false;
+            if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+              echo "<p>※すでに参加者メンバーです</p>";
+              echo '<a href = "main_job.php">戻る</a>';
+              return false;
+            }
           }
+/////////////////////////////////////////////////////
+          $sql = "SELECT * FROM no_enter";
+          $stmt = $dbh->query($sql);
+           foreach($stmt as $row){
+           if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+          $sql ="DELETE FROM no_enter WHERE name_id= ?";
+          $stmt = $dbh->prepare($sql);
+          $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+          $stmt ->execute();
+            }
+         }
+         ///////////////////////////////////////////////////////////////////////////
+         $sql = "SELECT * FROM unkonow";
+         $stmt = $dbh->query($sql);
+           foreach($stmt as $row){
+           if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+           $sql ="DELETE FROM unkowon WHERE name_id= ?";
+          $stmt = $dbh->prepare($sql);
+          $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+          $stmt ->execute();
+            }
+          }
+          /////////////////////////////////////////////////////////////////////////
           $sql ="INSERT INTO enter(name,id,name_id) VALUES (:name,:id,:name_id)";
           $stmt =$dbh->prepare($sql);
           $stmt->bindValue(':name',$_SESSION['name'],PDO::PARAM_STR);
@@ -158,11 +182,35 @@
           $sql = "SELECT * FROM no_enter";
           $stmt = $dbh->query($sql);
           foreach($stmt as $row){
-            if($row['name_id'] == $_SESSION['nameid']);
-             echo "<p>※すでに不参加者メンバーです</p>";
-             echo '<a href = "main_job.php">戻る</a>';
-             return false;
+            if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+              echo "<p>※すでに不参加者メンバーです</p>";
+              echo '<a href = "main_job.php">戻る</a>';
+              return false;
+            }
           }
+/////////////////////////////////////////
+          $sql = "SELECT * FROM enter";
+          $stmt = $dbh->query($sql);
+           foreach($stmt as $row){
+           if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+           $sql ="DELETE FROM enter WHERE name_id= ?";
+          $stmt = $dbh->prepare($sql);
+          $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+          $stmt ->execute();
+            }
+          }
+          ///////////////////////////////////////////////////////////////////////////
+          $sql = "SELECT * FROM unkonow";
+          $stmt = $dbh->query($sql);
+            foreach($stmt as $row){
+            if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+            $sql ="DELETE FROM unkowon WHERE name_id= ?";
+           $stmt = $dbh->prepare($sql);
+           $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+           $stmt ->execute();
+             }
+           }
+           ////////////////////////////////////////////////////////////////////////////
           $sql ="INSERT INTO no_enter(name,id,name_id) VALUES (:name,:id,:name_id)";
           $stmt =$dbh->prepare($sql);
           $stmt->bindValue(':name',$_SESSION['name'],PDO::PARAM_STR);
@@ -178,11 +226,35 @@
           $sql = "SELECT * FROM unkonow";
           $stmt = $dbh->query($sql);
           foreach($stmt as $row){
-            if($row['name_id'] == $_SESSION['nameid']);
-             echo "<p>※すでに不明者メンバーです</p>";
-             echo '<a href = "main_job.php">戻る</a>';
-             return false;
+            if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+              echo "<p>※すでに不明者メンバーです</p>";
+              echo '<a href = "main_job.php">戻る</a>';
+              return false;
+            }
           }
+////////////////////////////////////////
+          $sql = "SELECT * FROM enter";
+          $stmt = $dbh->query($sql);
+           foreach($stmt as $row){
+           if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+           $sql ="DELETE FROM enter WHERE name_id= ?";
+          $stmt = $dbh->prepare($sql);
+          $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+          $stmt ->execute();
+            }
+          }
+          //////////////////////////////////////////////////////////////////////////////
+          $sql = "SELECT * FROM no_enter";
+          $stmt = $dbh->query($sql);
+           foreach($stmt as $row){
+           if($row['name_id'] == $_SESSION['nameid'] && $row['id'] == $_SESSION['id']){
+          $sql ="DELETE FROM no_enter WHERE name_id= ?";
+          $stmt = $dbh->prepare($sql);
+          $stmt ->bindValue('1',$_SESSION['nameid'],PDO::PARAM_STR);
+          $stmt ->execute();
+            }
+         }
+         ////////////////////////////////////////////////////////////////////////////
           $sql ="INSERT INTO unkonow(name,id,name_id) VALUES (:name,:id,:name_id)";
           $stmt =$dbh->prepare($sql);
           $stmt->bindValue(':name',$_SESSION['name'],PDO::PARAM_STR);
@@ -191,15 +263,14 @@
           $stmt->execute(); 
           echo '不明者加わりました';
            $dbh=null;
-//不明者一覧///////////////////////////////////////////////////////////////////////////
-        } 
+//不明者一覧終了///////////////////////////////////////////////////////////////////////////
+        }    
       } catch(PDOException $e){
         print('接続失敗:' . $e->getMessage());
         die();
       }
     }
-      
-    ?>
+?>
     <br>
     <a href="main_job.php">戻る</a>
   </body>
