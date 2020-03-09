@@ -1,0 +1,53 @@
+<p>※IDを入力してください</p>
+<form method="POST">
+  <input type="text" name="id" value="<?php  if(!empty($_POST['id'])) echo $_POST['id'] ?>">
+  <br>
+  <input type="submit" name="submit" value="検索">
+  </form>
+  <br>
+  <?php 
+  if($_POST){
+    if(!empty($_POST)){
+      $usr ="test";
+      $pass ="sakiyama0910";
+     
+      try{
+       $dbh=new PDO('mysql:host=localhost;dbname=manabiya;charset=utf8', $usr, $pass);
+       $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
+       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       $sql = "SELECT * FROM new_pepole";
+       $stmt =$dbh->query($sql);
+       $stmt ->execute([$_POST['id']]);
+       while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+       if($row['id'] == $_POST['id']){
+         echo 'ID:'.$row['id'].'の'.$row['name'].'さんを追加済ますか<br>';
+?>
+ <form action="POST">
+   <br>
+   <input type="radio" name="action" value="1">YSE
+   <input type="radio" name="action" value="2">NO
+   <br>
+   <input type="submit" name="submit1" value="送信">
+ <form>
+<?php
+         if(!empty($_POST['submit1'])  && $_POST['action'] == 1){
+           echo '<p>友達を追加しました</p>';
+         }
+         else if(!empty($_POST['submit1']) && $_POST['actuin'] ==2){
+           echo '<p>追加しませんでした</p>';
+         }
+        }  
+      }
+        if(!isset($row['id']) && !empty($_POST['id'])){
+          echo '<p>いません</p>';
+        }
+       } catch(PDOException $e){
+       echo '接続エラー' . $e->getMessage();
+       } 
+      } if(empty($_POST['id'])) {
+        echo '<p>※IDを入力してください</p>';
+      }
+    }
+  ?>
+<br>
+<a href ="main_job.php">戻る</a>
