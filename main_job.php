@@ -35,16 +35,24 @@
 
   $weeks = [];
   $week ='';
-
+  
+  session_start();
   $week .= str_repeat('<td></td>', $youbi);
   for($day =1; $day<=$day_count;$day++,$youbi++){
    $date = $ym.'-'.$day;
+   $_SESSION['day'] = $day;
+   ?>
+   <input type="hidden" name="month" value="<?php  echo date(date('n',$timestamp)) ?>">
+   <input type="hidden" name="day" value="<?php  echo $day ?>">
+   <?php
    if($today == $date){
-     $week .='<td class="today">' . $day;
+//日にちリンクで新規仕事登録の際、日にちが現れるシステム//////////////////////////////
+     $week .='<td class="today"><a href="job.php?month='.date('n',$timestamp).'&day='.$day.'">' . $day.'</a>';
    } else {
-     $week .='<td>' .$day;
+     $week .='<td><a href="job.php?month='.date('n',$timestamp).'&day='.$day.'">' .$day.'</a>';
    } 
    $sql = "SELECT * FROM jobs";
+   $_SESSION['id'] = $day;
    $stmt = $dbh->query($sql);
    foreach($stmt as $row){
      $city = date('Y-m-j',mktime(0,0,0,$row['month'],$row['day'],date('Y',$timestamp)));
@@ -67,6 +75,7 @@
        $week ='';
      }
   }
+  //日にちで固定//////////////////////
 ?>
 
 <!DOCTYPE html>
@@ -79,12 +88,14 @@
   <body>
     <div class ="container">
       <?php  
-        session_start();
         echo '<h1>'.$_SESSION['name'].'さんの仕事内容</h1>';
       ?>
       <h3><a href="?ym=<?php echo $prev; ?>">&lt;</a><?php echo $html_title; ?><a href="?ym=<?php echo $next ; ?>">&gt;</a></h3>
+      <a class="bot" href="#">仕事メンバー申請</a>
+      <?php //まだ開発環境整えず状態///////////////////////////////////////////////////////////////////////////////////////////////////   ?>
       <a class="bot" href="job.php">新しい仕事の新規登録</a>
       <a class="bot" href="logout_job.php">ログアウト</a>
+      <a>アカウント削除は<a href="delete_peple.php">こちら</a></a>
      <table border ="1">
        <tr><th>日にち</th><th>時間</th><th>タイトル</th><th>場所</th><th>内容</th><th>重要度</th><th>更新</th><th>削除</th></tr>
        <?php
